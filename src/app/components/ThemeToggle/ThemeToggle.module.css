@@ -1,0 +1,12 @@
+.themeToggleContianer {
+  width: 200px;
+  margin: auto auto;
+  padding: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  cursor: pointer;
+  border: 1px solid var(--primary);
+  border-radius: 0.8rem;
+}
