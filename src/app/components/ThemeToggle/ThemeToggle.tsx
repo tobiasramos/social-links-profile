@@ -7,12 +7,22 @@ import styles from "./ThemeToggle.module.css";
 type AvailableThemes = "dark" | "light";
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<AvailableThemes>(() => {
+  const [theme, setTheme] = useState<AvailableThemes>("dark");
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
     const storageTheme =
       (localStorage.getItem("theme") as AvailableThemes) || "dark";
+    setTheme(storageTheme);
+    setIsMounted(true);
+  }, []);
 
-    return storageTheme;
-  });
+  useEffect(() => {
+    if (isMounted) {
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem("theme", theme);
+    }
+  }, [theme, isMounted]);
 
   const nextThemeIcon = {
     dark: <SunIcon />,
@@ -20,16 +30,10 @@ export function ThemeToggle() {
   };
 
   function handleThemeChange() {
-    setTheme((prevTheme) => {
-      const nextTheme = prevTheme == "dark" ? "light" : "dark";
-      return nextTheme;
-    });
+    setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
   }
 
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
-  }, [theme]);
+  if (!isMounted) return null;
 
   return (
     <div className={styles.themeToggleContianer} onClick={handleThemeChange}>
